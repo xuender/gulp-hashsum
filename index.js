@@ -30,6 +30,7 @@ var compareBuffer = typeof Buffer.compare !== 'undefined' ?
 function hashsum(options) {
 	options = _.defaults(options || {}, {
 		dest: process.cwd(),
+		root: process.cwd(),
 		hash: 'sha1',
 		force: false,
 		delimiter: '  ',
@@ -53,8 +54,8 @@ function hashsum(options) {
 			this.emit('error', new gutil.PluginError('gulp-hashsum', 'Streams not supported'));
 			return;
 		}
-		var filePath = path.resolve(options.dest, file.path);
-		hashes[slash(path.relative(path.dirname(hashesFilePath), filePath))] = crypto
+		var filePath = path.resolve(options.root, file.path);
+		hashes[slash(path.relative(options.root, filePath))] = crypto
 			.createHash(options.hash)
 			.update(file.contents, 'binary')
 			.digest('hex').substr(0, options.size);
